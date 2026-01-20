@@ -39,8 +39,6 @@ import { createPaletteData } from "./components/palette.js";
  * DOMContentLoaded 이벤트에서 호출되어야 합니다.
  */
 const initApp = () => {
-  console.log("🎨 픽셀 아트 에디터 초기화 중...");
-
   // 1. Alpine.js 팔레트 컴포넌트를 전역으로 등록
   // HTML에서 x-data="paletteData()"로 사용 가능
   window.paletteData = createPaletteData;
@@ -51,33 +49,22 @@ const initApp = () => {
   // 3. Alpine.js 시작
   // 이 시점부터 x-data, x-for 등의 디렉티브가 작동합니다
   Alpine.start();
-  console.log("✅ Alpine.js 시작됨");
 
   // 4. 캔버스 그리기 이벤트 초기화
   // 마우스 클릭, 드래그 등의 이벤트 리스너 등록
   initDrawingEvents();
-  console.log("✅ 그리기 이벤트 초기화됨");
 
   // 5. 히스토리 키보드 이벤트 초기화
   // Ctrl+Z (Undo), Ctrl+Y (Redo) 단축키 등록
   initHistoryEvents();
-  console.log("✅ 히스토리 이벤트 초기화됨");
 
   // 6. 초기 상태를 히스토리에 저장
   // 빈 캔버스 상태를 저장하여 Undo로 돌아갈 수 있게 함
   saveState();
-  console.log("✅ 초기 상태 저장됨");
 
   // 7. 캔버스 첫 렌더링
   // 그리드를 그려서 사용자에게 보여줌
   render();
-  console.log("✅ 캔버스 렌더링 완료");
-
-  console.log("🎉 픽셀 아트 에디터 준비 완료!");
-  console.log("📖 사용법:");
-  console.log("  - 마우스 드래그: 그리기");
-  console.log("  - Ctrl+Z: 되돌리기");
-  console.log("  - Ctrl+Y: 다시하기");
 };
 
 /**
