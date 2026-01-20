@@ -1,9 +1,12 @@
 body {
   background: slategray;
   display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 20px;
   padding: 20px;
   font-family: Arial, sans-serif;
+  min-height: 100vh;
 }
 
 canvas {
@@ -20,9 +23,8 @@ canvas {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  width: 280px;
-  max-height: 640px;
-  overflow-y: auto;
+  width: 640px;
+  max-width: 640px;
 }
 
 /* 팔레트 섹션 */
@@ -41,7 +43,7 @@ canvas {
 /* 팔레트 그리드 */
 .palette-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   gap: 8px;
 }
 
@@ -63,7 +65,9 @@ canvas {
 
 .color-button.selected {
   border: 3px solid #000;
-  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #000;
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 4px #000;
 }
 
 /* 색상 버튼 래퍼 (삭제 버튼용) */
@@ -97,6 +101,7 @@ canvas {
 /* 색상 선택기 컨테이너 */
 .color-picker-container {
   display: flex;
+
   flex-direction: column;
   gap: 10px;
   margin-bottom: 15px;
@@ -112,7 +117,7 @@ canvas {
 
 #addColorButton {
   padding: 10px;
-  background: #4CAF50;
+  background: #4caf50;
   color: white;
   border: none;
   border-radius: 4px;
