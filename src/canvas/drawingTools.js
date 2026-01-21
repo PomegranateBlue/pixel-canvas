@@ -3,11 +3,13 @@
  *
  * 이 모듈은 사용자의 마우스 입력을 처리하고,
  * 캔버스에 그림을 그리는 기능을 제공합니다.
+ * jQuery 4를 사용하여 이벤트를 처리합니다.
  */
 
+import $ from "jquery";
 import { CANVAS_CONFIG, GRID_SIZE, TOOLS } from "../config/constants.js";
 import { setPixel } from "./pixelData.js";
-import { render, getCanvas } from "./renderer.js";
+import { render, get$Canvas } from "./renderer.js";
 import { saveState } from "../history/historyManager.js";
 
 // ===== 상태 변수 =====
@@ -64,6 +66,11 @@ const toolActions = {
  * @param {MouseEvent} e - 마우스 이벤트
  * @returns {{x: number, y: number}} 픽셀 좌표
  *
+ * jQuery 이벤트 객체:
+ * - e.pageX, e.pageY: 페이지 기준 좌표
+ * - e.clientX, e.clientY: 뷰포트 기준 좌표
+ * - jQuery가 자동으로 브라우저 호환성 처리
+ *
  * @example
  * // 마우스 위치가 (105, 115)px일 때
  * const { x, y } = getPixelCoordinates(event);
@@ -71,12 +78,16 @@ const toolActions = {
  * // y = 5 (115 / 20 = 5.75 → floor = 5)
  */
 const getPixelCoordinates = (e) => {
-  const canvas = getCanvas();
-  const rect = canvas.getBoundingClientRect();
+  const $canvas = get$Canvas();
+
+  // jQuery의 .offset(): 요소의 페이지 기준 위치 반환
+  // { top: number, left: number }
+  const offset = $canvas.offset();
 
   // 캔버스 내에서의 마우스 위치 계산
-  const mouseX = e.clientX - rect.left;
-  const mouseY = e.clientY - rect.top;
+  // e.pageX/pageY는 페이지 기준 좌표
+  const mouseX = e.pageX - offset.left;
+  const mouseY = e.pageY - offset.top;
 
   // 픽셀 좌표로 변환 (정수로 내림)
   const x = Math.floor(mouseX / CANVAS_CONFIG.pixelSize);
@@ -106,47 +117,41 @@ const draw = (e) => {
 /**
  * 그리기 이벤트 리스너를 초기화합니다
  *
+ * jQuery 이벤트 메서드:
+ * - .on('event', handler): 이벤트 리스너 등록
+ * - .off('event'): 이벤트 리스너 제거
+ * - 체이닝 가능: $el.on('click', fn).on('hover', fn)
+ *
  * 이 함수는 애플리케이션 시작 시 한 번만 호출되어야 합니다.
  */
 export const initDrawingEvents = () => {
-  const canvas = getCanvas();
+  const $canvas = get$Canvas();
 
   /**
-   * 마우스 버튼을 눌렀을 때
-   * - 그리기 시작
-   * - 현재 상태를 히스토리에 저장 (Undo/Redo용)
-   * - 첫 픽셀 그리기
+   * jQuery .on() 메서드로 이벤트 등록
+   *
+   * 문법: $(selector).on('eventName', handlerFunction)
+   * 여러 이벤트: $(selector).on('event1 event2', handler)
    */
-  canvas.addEventListener("mousedown", (e) => {
-    isDrawing = true;
-    saveState(); // Undo를 위해 현재 상태 저장
-    draw(e);
-  });
-
-  /**
-   * 마우스를 움직일 때
-   * - 그리기 중일 때만 연속으로 그립니다
-   */
-  canvas.addEventListener("mousemove", (e) => {
-    if (isDrawing) {
+  $canvas
+    // 마우스 버튼을 눌렀을 때: 그리기 시작
+    .on("mousedown", (e) => {
+      isDrawing = true;
+      saveState(); // Undo를 위해 현재 상태 저장
       draw(e);
-    }
-  });
-
-  /**
-   * 마우스 버튼을 뗐을 때
-   * - 그리기 종료
-   */
-  canvas.addEventListener("mouseup", () => {
-    isDrawing = false;
-  });
-
-  /**
-   * 마우스가 캔버스를 벗어났을 때
-   * - 그리기 종료
-   * - 캔버스 밖에서 마우스를 떼어도 그리기가 멈춥니다
-   */
-  canvas.addEventListener("mouseleave", () => {
-    isDrawing = false;
-  });
+    })
+    // 마우스를 움직일 때: 그리기 중일 때만 연속으로 그림
+    .on("mousemove", (e) => {
+      if (isDrawing) {
+        draw(e);
+      }
+    })
+    // 마우스 버튼을 뗐을 때: 그리기 종료
+    .on("mouseup", () => {
+      isDrawing = false;
+    })
+    // 마우스가 캔버스를 벗어났을 때: 그리기 종료
+    .on("mouseleave", () => {
+      isDrawing = false;
+    });
 };

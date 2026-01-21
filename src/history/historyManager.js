@@ -3,8 +3,10 @@
  *
  * 이 모듈은 사용자의 작업 기록을 관리하여
  * "되돌리기(Undo)"와 "다시하기(Redo)" 기능을 제공합니다.
+ * jQuery 4를 사용하여 키보드 이벤트를 처리합니다.
  */
 
+import $ from "jquery";
 import { pixelData } from "../canvas/pixelData.js";
 import { render } from "../canvas/renderer.js";
 import { GRID_SIZE } from "../config/constants.js";
@@ -117,11 +119,20 @@ export const redo = () => {
 /**
  * 키보드 단축키 이벤트를 초기화합니다
  *
- * - Ctrl+Z: Undo
- * - Ctrl+Y: Redo
+ * jQuery 키보드 이벤트:
+ * - $(document).on('keydown', handler): 문서 전체에서 키 입력 감지
+ * - e.ctrlKey: Ctrl 키가 눌렸는지 확인
+ * - e.key: 눌린 키 이름 (예: 'z', 'y')
+ * - e.preventDefault(): 브라우저 기본 동작 방지
+ *
+ * 단축키:
+ * - Ctrl+Z: Undo (되돌리기)
+ * - Ctrl+Y: Redo (다시하기)
  */
 export const initHistoryEvents = () => {
-  document.addEventListener("keydown", (e) => {
+  // $(document): 문서 전체를 jQuery 객체로 선택
+  // .on('keydown', handler): 키보드 눌림 이벤트 등록
+  $(document).on("keydown", (e) => {
     // Ctrl+Z: 되돌리기
     if (e.ctrlKey && e.key === "z") {
       e.preventDefault(); // 브라우저 기본 동작 방지

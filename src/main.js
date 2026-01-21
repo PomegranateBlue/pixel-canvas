@@ -22,6 +22,11 @@
 // ===== Alpine.js 임포트 =====
 import Alpine from "alpinejs";
 
+// ===== jQuery 임포트 =====
+// jQuery 4: $ 함수로 DOM 선택 및 조작
+// 사용법: $('#id'), $('.class'), $('tag')
+import $ from "jquery";
+
 // ===== 캔버스 관련 모듈 임포트 =====
 import { render } from "./canvas/renderer.js";
 import { initDrawingEvents } from "./canvas/drawingTools.js";
@@ -36,7 +41,7 @@ import { createPaletteData } from "./components/palette.js";
  * 애플리케이션 초기화
  *
  * 이 함수는 모든 모듈을 설정하고 연결합니다.
- * DOMContentLoaded 이벤트에서 호출되어야 합니다.
+ * jQuery의 $(document).ready()를 사용하여 DOM 로드 후 실행됩니다.
  */
 const initApp = () => {
   // 1. Alpine.js 팔레트 컴포넌트를 전역으로 등록
@@ -68,20 +73,13 @@ const initApp = () => {
 };
 
 /**
- * DOM이 로드되면 애플리케이션 초기화
+ * jQuery의 $(document).ready() 사용
  *
- * DOMContentLoaded 이벤트:
- * - HTML 파싱이 완료되고 DOM 트리가 만들어진 시점
- * - 이미지나 스타일시트 로딩 완료를 기다리지 않음
- * - 가장 빠른 시점에 JavaScript 실행 가능
+ * jQuery 4에서는 $() 단축 문법 사용 가능:
+ * - $(function() { }) === $(document).ready(function() { })
+ * - DOM이 완전히 로드된 후 콜백 실행
  */
-if (document.readyState === "loading") {
-  // 아직 로딩 중이면 이벤트 등록
-  document.addEventListener("DOMContentLoaded", initApp);
-} else {
-  // 이미 로드 완료되었으면 바로 실행
-  initApp();
-}
+$(initApp);
 
 /**
  * 개발자 도구 팁:

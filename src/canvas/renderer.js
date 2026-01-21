@@ -5,11 +5,16 @@
  * Canvas API를 사용하여 픽셀과 그리드를 렌더링합니다.
  */
 
+import $ from "jquery";
 import { CANVAS_CONFIG, GRID_SIZE, GRID_STYLE } from "../config/constants.js";
 import { pixelData } from "./pixelData.js";
 
-// 캔버스 요소와 2D 컨텍스트를 가져옵니다
-const canvas = document.getElementById("pixelCanvas");
+// ===== jQuery로 캔버스 요소 선택 =====
+// $('#id'): ID로 요소 선택
+// .get(0) 또는 [0]: jQuery 객체에서 실제 DOM 요소 추출
+// Canvas API는 실제 DOM 요소가 필요하므로 [0] 사용
+const $canvas = $("#pixelCanvas");
+const canvas = $canvas[0]; // jQuery 객체 → DOM 요소
 const ctx = canvas.getContext("2d");
 
 // 이미지 스무딩 비활성화
@@ -93,6 +98,12 @@ export const render = () => {
 export const getCanvasContext = () => ctx;
 
 /**
- * 캔버스 요소를 반환합니다
+ * 캔버스 DOM 요소를 반환합니다
  */
 export const getCanvas = () => canvas;
+
+/**
+ * jQuery로 감싼 캔버스 객체를 반환합니다
+ * jQuery 메서드를 사용하고 싶을 때 활용
+ */
+export const get$Canvas = () => $canvas;
