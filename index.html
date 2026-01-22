@@ -1,97 +1,13 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ko">
   <head>
-    <link rel="stylesheet" href="style.css" />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>8Bit</title>
+    <title>3D Voxel Editor</title>
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <canvas id="pixelCanvas" width="728" height="728"></canvas>
-
-    <!-- Alpine.js 팔레트 UI -->
-    <div id="paletteContainer" x-data="paletteData()">
-      <!-- 기본 팔레트 -->
-      <div class="palette-section">
-        <h3>기본 팔레트</h3>
-        <div class="palette-grid">
-          <template x-for="color in defaultPalette" :key="color">
-            <button
-              class="color-button"
-              :class="{ selected: currentColor === color }"
-              :style="`background: ${color}`"
-              :title="color"
-              @click="selectColor(color)"
-            ></button>
-          </template>
-        </div>
-      </div>
-
-      <!-- 최근 사용 색상 -->
-      <div class="palette-section">
-        <h3>최근 사용</h3>
-        <div class="palette-grid">
-          <template x-if="recentColors.length === 0">
-            <p class="empty-message">사용한 색상이 없습니다</p>
-          </template>
-          <template x-for="color in recentColors" :key="color">
-            <button
-              class="color-button"
-              :class="{ selected: currentColor === color }"
-              :style="`background: ${color}`"
-              :title="color"
-              @click="selectColor(color)"
-            ></button>
-          </template>
-        </div>
-      </div>
-
-      <!-- 색상 선택기 -->
-      <div class="palette-section">
-        <h3>색상 선택기</h3>
-        <div class="color-picker-container">
-          <input
-            type="color"
-            id="colorPicker"
-            x-model="currentColor"
-            @input="updateColor"
-          />
-          <button id="addColorButton" @click="addCustomColor">
-            팔레트에 추가
-          </button>
-          <div class="current-color-display">
-            <span>현재 색상:</span>
-            <div
-              class="color-preview"
-              :style="`background: ${currentColor}`"
-            ></div>
-            <span x-text="currentColor" id="currentColorHex"></span>
-          </div>
-        </div>
-
-        <!-- 커스텀 팔레트 -->
-        <div class="palette-grid" x-show="customColors.length > 0">
-          <template x-for="(color, index) in customColors" :key="color">
-            <div class="color-button-wrapper">
-              <button
-                class="color-button"
-                :class="{ selected: currentColor === color }"
-                :style="`background: ${color}`"
-                :title="color"
-                @click="selectColor(color)"
-              ></button>
-              <button
-                class="remove-color-button"
-                @click.stop="removeCustomColor(index)"
-              >
-                ×
-              </button>
-            </div>
-          </template>
-        </div>
-      </div>
-    </div>
-
-    <script type="module" src="/src/main.js"></script>
+    <canvas id="canvas"></canvas>
+    <script type="module" src="app.js"></script>
   </body>
 </html>
