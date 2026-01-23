@@ -42,7 +42,7 @@ for (let x = 0; x < boardSize; x++) {
     tile.position.set(
       x * tileSize - (boardSize * tileSize) / 2 + tileSize / 2,
       0,
-      z * tileSize - (boardSize * tileSize) / 2 + tileSize / 2
+      z * tileSize - (boardSize * tileSize) / 2 + tileSize / 2,
     );
     scene.add(tile);
   }
@@ -61,15 +61,27 @@ const postProcessing = new THREE.PostProcessing(renderer);
 postProcessing.outputNode = pixelationPass(scene, camera, 6);
 
 // WebGPU 초기화 후 애니메이션 시작
-async function init() {
+
+// async function init() {
+//   await renderer.init();
+
+//   const animate = () => {
+//     requestAnimationFrame(animate);
+//     controls.update();
+//     postProcessing.render();
+//   };
+//   animate();
+// }
+
+const init = async () => {
   await renderer.init();
 
   const animate = () => {
     requestAnimationFrame(animate);
-    controls.update();
+    constrols.update();
     postProcessing.render();
   };
   animate();
-}
+};
 
 init();
