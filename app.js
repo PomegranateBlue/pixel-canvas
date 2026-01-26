@@ -5,6 +5,8 @@ import { createSphere } from "./sphere.js";
 import { initKeypad, moveSphere } from "./animate/keypad.js";
 
 import generateFloor from "./objects/floor.js";
+import { addHelpers } from "./debug/helper.js";
+import { shouldRender } from "./animate/clock.js";
 
 // Scene, Camera 생성
 const scene = new THREE.Scene();
@@ -36,6 +38,9 @@ scene.add(light);
 
 generateFloor(scene);
 
+// 디버그 헬퍼
+addHelpers(scene);
+
 // 구 생성 (체스판 위에 배치)
 const sphere = createSphere();
 scene.add(sphere);
@@ -50,13 +55,18 @@ postProcessing.outputNode = pixelationPass(scene, camera, 3);
 const init = async () => {
   await renderer.init();
 
-  const animate = () => {
+  const animate = (currentTime) => {
     requestAnimationFrame(animate);
+
+    if (!shouldRender(currentTime)) {
+      return;
+    }
+
     controls.update();
     moveSphere(sphere);
     postProcessing.render();
   };
-  animate();
+  animate(0);
 };
 
 init();
