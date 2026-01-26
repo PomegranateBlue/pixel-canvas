@@ -1,12 +1,13 @@
 import * as THREE from "three/webgpu";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { pixelationPass } from "three/addons/tsl/display/PixelationPassNode.js";
-import { createSphere } from "./sphere.js";
+import { createSphere } from "./objects/sphere.js";
 import { initKeypad, moveSphere } from "./animate/keypad.js";
 
 import generateFloor from "./objects/floor.js";
 import { addHelpers } from "./debug/helper.js";
 import { shouldRender } from "./animate/clock.js";
+import { updateJump } from "./animate/jump.js";
 
 // Scene, Camera 생성
 const scene = new THREE.Scene();
@@ -64,6 +65,7 @@ const init = async () => {
 
     controls.update();
     moveSphere(sphere);
+    updateJump(sphere);
     postProcessing.render();
   };
   animate(0);

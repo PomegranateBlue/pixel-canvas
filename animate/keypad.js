@@ -1,3 +1,5 @@
+import { startJump } from "./jump.js";
+
 // 키 상태 저장
 const keys = {
   up: false,
@@ -16,6 +18,7 @@ export const initKeypad = () => {
     if (e.key === "ArrowDown") keys.down = true;
     if (e.key === "ArrowLeft") keys.left = true;
     if (e.key === "ArrowRight") keys.right = true;
+    if (e.key === " ") startJump();
   });
 
   addEventListener("keyup", (e) => {
