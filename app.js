@@ -1,6 +1,10 @@
 import * as THREE from "three/webgpu";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { pixelationPass } from "three/addons/tsl/display/PixelationPassNode.js";
+import { createSphere } from "./sphere.js";
+import { initKeypad, moveSphere } from "./animate/keypad.js";
+
+import generateFloor from "./objects/floor.js";
 
 // Scene, Camera 생성
 const scene = new THREE.Scene();
@@ -29,59 +33,37 @@ light.position.set(5, 5, 5);
 scene.add(light);
 
 // 체스판 생성
-const boardSize = 8;
-const tileSize = 1;
-const whiteMat = new THREE.MeshStandardMaterial({ color: 0xeeeeee });
-const blackMat = new THREE.MeshStandardMaterial({ color: 0x333333 });
-const tileGeo = new THREE.BoxGeometry(tileSize, 0.2, tileSize);
 
-for (let x = 0; x < boardSize; x++) {
-  for (let z = 0; z < boardSize; z++) {
-    const isWhite = (x + z) % 2 === 0;
-    const tile = new THREE.Mesh(tileGeo, isWhite ? whiteMat : blackMat);
-    tile.position.set(
-      x * tileSize - (boardSize * tileSize) / 2 + tileSize / 2,
-      0,
-      z * tileSize - (boardSize * tileSize) / 2 + tileSize / 2,
-    );
-    scene.add(tile);
-  }
-}
+generateFloor(scene);
 
 // 구 생성 (체스판 위에 배치)
-const sphere = new THREE.Mesh(
-  new THREE.SphereGeometry(0.4, 32, 32),
-  new THREE.MeshStandardMaterial({ color: 0x00ff88 }),
-);
-sphere.position.set(0, 0.5, 0);
+const sphere = createSphere();
 scene.add(sphere);
+
+// 키패드 이벤트 등록
+initKeypad();
 
 // 픽셀화 후처리 (숫자가 클수록 픽셀이 커짐)
 const postProcessing = new THREE.PostProcessing(renderer);
-postProcessing.outputNode = pixelationPass(scene, camera, 6);
-
-// WebGPU 초기화 후 애니메이션 시작
-
-// async function init() {
-//   await renderer.init();
-
-//   const animate = () => {
-//     requestAnimationFrame(animate);
-//     controls.update();
-//     postProcessing.render();
-//   };
-//   animate();
-// }
+postProcessing.outputNode = pixelationPass(scene, camera, 3);
 
 const init = async () => {
   await renderer.init();
 
   const animate = () => {
     requestAnimationFrame(animate);
-    constrols.update();
+    controls.update();
+    moveSphere(sphere);
     postProcessing.render();
   };
   animate();
 };
 
 init();
+
+// 리사이즈 대응
+addEventListener("resize", () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
