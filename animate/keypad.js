@@ -9,7 +9,7 @@ const keys = {
 };
 
 // 이동 속도
-const speed = 0.06;
+const speed = 0.08;
 
 // 키보드 이벤트 등록
 export const initKeypad = () => {

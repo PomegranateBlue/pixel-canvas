@@ -1,5 +1,5 @@
 // FPS 제한
-const targetFPS = 45;
+const targetFPS = 40;
 const interval = 1000 / targetFPS;
 let lastTime = 0;
 
