@@ -5,7 +5,7 @@ import { createSphere } from "./objects/sphere.js";
 import { initKeypad, moveSphere } from "./animate/keypad.js";
 
 import generateFloor from "./objects/floor.js";
-import { addHelpers } from "./debug/helper.js";
+import { addHelpers, addCameraDebugGUI } from "./debug/helper.js";
 import { shouldRender } from "./animate/clock.js";
 import { updateJump } from "./animate/jump.js";
 
@@ -41,6 +41,7 @@ generateFloor(scene);
 
 // 디버그 헬퍼
 addHelpers(scene);
+addCameraDebugGUI(camera);
 
 // 구 생성 (체스판 위에 배치)
 const sphere = createSphere();
