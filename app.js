@@ -11,7 +11,8 @@ import { updateJump } from "./animate/jump.js";
 
 // Scene, Camera 생성
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x1a1a2e);
+const BACKGROUND_COLOR = 0x1a1a2e;
+scene.background = new THREE.Color(BACKGROUND_COLOR);
 
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -31,8 +32,18 @@ document.body.appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 
 // 조명
-scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-const light = new THREE.DirectionalLight(0xffffff, 1);
+
+const AMBIENTLIGHT_COLOR = 0xffffff;
+const AMBIENTLIGHT_INTENSITY = 0.5;
+const DIRECTIONALLIGHT_COLOR = 0xffffff;
+const DIRECTIONALLIGHT_INTENSITY = 1.0;
+
+scene.add(new THREE.AmbientLight(AMBIENTLIGHT_COLOR, AMBIENTLIGHT_INTENSITY));
+
+const light = new THREE.DirectionalLight(
+  DIRECTIONALLIGHT_COLOR,
+  DIRECTIONALLIGHT_INTENSITY,
+);
 light.position.set(5, 5, 5);
 scene.add(light);
 
