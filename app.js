@@ -1,94 +1,86 @@
-import * as THREE from "three/webgpu";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { pixelationPass } from "three/addons/tsl/display/PixelationPassNode.js";
-import { createSphere } from "./objects/sphere.js";
-import { initKeypad, moveSphere } from "./animate/keypad.js";
+import * as THREE from 'three/webgpu'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import { pixelationPass } from 'three/addons/tsl/display/PixelationPassNode.js'
+import { createSphere } from './objects/sphere.js'
+import { initKeypad, moveSphere } from './animate/keypad.js'
 
-import generateFloor from "./objects/floor.js";
-import { addHelpers, addCameraDebugGUI } from "./debug/helper.js";
-import { shouldRender } from "./animate/clock.js";
-import { updateJump } from "./animate/jump.js";
+import generateFloor from './objects/floor.js'
+import { addHelpers, addCameraDebugGUI } from './debug/helper.js'
+import { shouldRender } from './animate/clock.js'
+import { updateJump } from './animate/jump.js'
 
 // Scene, Camera 생성
-const scene = new THREE.Scene();
-const BACKGROUND_COLOR = 0x1a1a2e;
-scene.background = new THREE.Color(BACKGROUND_COLOR);
+const scene = new THREE.Scene()
+const BACKGROUND_COLOR = 0x1a1a2e
+scene.background = new THREE.Color(BACKGROUND_COLOR)
 
-const camera = new THREE.PerspectiveCamera(
-  75,
-  innerWidth / innerHeight,
-  0.1,
-  100,
-);
-camera.position.set(4.9, 5.5, 9.4);
+const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 100)
+camera.position.set(4.9, 5.5, 9.4)
 //현재 씬에서 고정시킬 카메라 좌표
 
 // Renderer 생성
-const renderer = new THREE.WebGPURenderer({ antialias: false });
-renderer.setSize(innerWidth, innerHeight);
-document.body.appendChild(renderer.domElement);
+const renderer = new THREE.WebGPURenderer({ antialias: false })
+renderer.setSize(innerWidth, innerHeight)
+document.body.appendChild(renderer.domElement)
 
 // OrbitControls
-const controls = new OrbitControls(camera, renderer.domElement);
+const controls = new OrbitControls(camera, renderer.domElement)
 
 // 조명
 
-const AMBIENTLIGHT_COLOR = 0xffffff;
-const AMBIENTLIGHT_INTENSITY = 0.5;
-const DIRECTIONALLIGHT_COLOR = 0xffffff;
-const DIRECTIONALLIGHT_INTENSITY = 1.0;
+const AMBIENTLIGHT_COLOR = 0xffffff
+const AMBIENTLIGHT_INTENSITY = 0.5
+const DIRECTIONALLIGHT_COLOR = 0xffffff
+const DIRECTIONALLIGHT_INTENSITY = 1.0
 
-scene.add(new THREE.AmbientLight(AMBIENTLIGHT_COLOR, AMBIENTLIGHT_INTENSITY));
+scene.add(new THREE.AmbientLight(AMBIENTLIGHT_COLOR, AMBIENTLIGHT_INTENSITY))
 
-const light = new THREE.DirectionalLight(
-  DIRECTIONALLIGHT_COLOR,
-  DIRECTIONALLIGHT_INTENSITY,
-);
-light.position.set(5, 5, 5);
-scene.add(light);
+const light = new THREE.DirectionalLight(DIRECTIONALLIGHT_COLOR, DIRECTIONALLIGHT_INTENSITY)
+light.position.set(5, 5, 5)
+scene.add(light)
 
 // 체스판 생성
 
-generateFloor(scene);
+generateFloor(scene)
 
 // 디버그 헬퍼
-addHelpers(scene);
-addCameraDebugGUI(camera);
+addHelpers(scene)
+addCameraDebugGUI(camera)
 
 // 구 생성 (체스판 위에 배치)
-const sphere = createSphere();
-scene.add(sphere);
+const sphere = createSphere()
+scene.add(sphere)
 
 // 키패드 이벤트 등록
-initKeypad();
+initKeypad()
 
 // 픽셀화 후처리 (숫자가 클수록 픽셀이 커짐)
-const postProcessing = new THREE.PostProcessing(renderer);
-postProcessing.outputNode = pixelationPass(scene, camera, 3);
+const postProcessing = new THREE.PostProcessing(renderer)
+postProcessing.outputNode = pixelationPass(scene, camera, 3)
 
 const init = async () => {
-  await renderer.init();
+    await renderer.init()
 
-  const animate = (currentTime) => {
-    requestAnimationFrame(animate);
+    const animate = (currentTime) => {
+        requestAnimationFrame(animate)
 
-    if (!shouldRender(currentTime)) {
-      return;
+        if (!shouldRender(currentTime)) {
+            return
+        }
+
+        controls.update()
+        moveSphere(sphere)
+        updateJump(sphere)
+        postProcessing.render()
     }
+    animate(0)
+}
 
-    controls.update();
-    moveSphere(sphere);
-    updateJump(sphere);
-    postProcessing.render();
-  };
-  animate(0);
-};
-
-init();
+init()
 
 // 리사이즈 대응
-addEventListener("resize", () => {
-  camera.aspect = innerWidth / innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth, innerHeight);
-});
+addEventListener('resize', () => {
+    camera.aspect = innerWidth / innerHeight
+    camera.updateProjectionMatrix()
+    renderer.setSize(innerWidth, innerHeight)
+})
