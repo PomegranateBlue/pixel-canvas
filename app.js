@@ -19,7 +19,8 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100,
 );
-camera.position.set(6, 6, 6);
+camera.position.set(4.9, 5.5, 9.4);
+//현재 씬에서 고정시킬 카메라 좌표
 
 // Renderer 생성
 const renderer = new THREE.WebGPURenderer({ antialias: false });

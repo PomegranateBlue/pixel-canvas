@@ -8,7 +8,7 @@ export const addHelpers = (scene) => {
   scene.add(axesHelper);
 
   // 그리드: 크기 12, 칸 12개
-  const gridHelper = new THREE.GridHelper(12, 12, 0x888888, 0x444444);
+  const gridHelper = new THREE.GridHelper(16, 16, 0x888888, 0x444444);
   gridHelper.position.y = 0.11; // 바닥 위에 살짝 띄움
   scene.add(gridHelper);
 };
@@ -53,17 +53,19 @@ export const addCameraDebugGUI = (camera) => {
     .name("FOV")
     .onChange(() => camera.updateProjectionMatrix());
 
-  gui.add(
-    {
-      reset: () => {
-        camera.position.set(6, 6, 6);
-        camera.rotation.set(0, 0, 0);
-        camera.fov = 75;
-        camera.updateProjectionMatrix();
+  gui
+    .add(
+      {
+        reset: () => {
+          camera.position.set(6, 6, 6);
+          camera.rotation.set(0, 0, 0);
+          camera.fov = 75;
+          camera.updateProjectionMatrix();
+        },
       },
-    },
-    "reset"
-  ).name("Reset Camera");
+      "reset",
+    )
+    .name("Reset Camera");
 
   return gui;
 };
