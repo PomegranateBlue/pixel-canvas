@@ -4,7 +4,7 @@ const bodies = new Map() // mesh → body 매핑
 
 export const initPhysics = async () => {
     await RAPIER.init()
-    world = new RAPIER.World({ x: 0, y: -9.81, z: 0 })
+    world = new RAPIER.World({ x: 0, y: -30.0, z: 0 })
     return world
 }
 

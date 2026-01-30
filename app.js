@@ -7,9 +7,9 @@ import { initKeypad, moveSphere } from './animate/keypad.js'
 import generateFloor from './objects/floor.js'
 import { addHelpers, addCameraDebugGUI } from './debug/helper.js'
 import { shouldRender } from './animate/clock.js'
-import { updateJump } from './animate/jump.js'
+// import { updateJump } from './animate/jump.js'
 
-import { initPhysics, addDynamicBody, addStaticBody, stepPhysics } from './animate/physics/rapierphysics.js'
+import { initPhysics, addDynamicBody, addCollideFloor, stepPhysics } from './animate/physics/rapierphysics.js'
 
 // Scene, Camera 생성
 const scene = new THREE.Scene()
@@ -65,7 +65,7 @@ const init = async () => {
     await initPhysics()
 
     addDynamicBody(sphere, 0.4)
-    addColliderFloor()
+    addCollideFloor()
 
     const animate = (currentTime) => {
         requestAnimationFrame(animate)
