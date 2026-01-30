@@ -9,6 +9,8 @@ import { addHelpers, addCameraDebugGUI } from './debug/helper.js'
 import { shouldRender } from './animate/clock.js'
 import { updateJump } from './animate/jump.js'
 
+import { initPhysics, addDynamicBody, addStaticBody, stepPhysics } from './animate/physics/rapierphysics.js'
+
 // Scene, Camera 생성
 const scene = new THREE.Scene()
 const BACKGROUND_COLOR = 0x1a1a2e
@@ -60,6 +62,10 @@ postProcessing.outputNode = pixelationPass(scene, camera, 3)
 
 const init = async () => {
     await renderer.init()
+    await initPhysics()
+
+    addDynamicBody(sphere, 0.4)
+    addColliderFloor()
 
     const animate = (currentTime) => {
         requestAnimationFrame(animate)
@@ -70,7 +76,8 @@ const init = async () => {
 
         controls.update()
         moveSphere(sphere)
-        updateJump(sphere)
+        stepPhysics()
+        // updateJump(sphere)
         postProcessing.render()
     }
     animate(0)

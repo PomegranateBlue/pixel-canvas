@@ -4,7 +4,10 @@
       "Bash(git init:*)",
       "Bash(git add:*)",
       "Bash(npm install:*)",
-      "Bash(npm init -y)"
+      "Bash(npm init -y)",
+      "Bash(dir /b \"c:\\\\Users\\\\bobae\\\\OneDrive\\\\바탕 화면\\\\coding\\\\practice\")",
+      "Bash(dir /s /b \"c:\\\\Users\\\\bobae\\\\OneDrive\\\\바탕 화면\\\\coding\\\\practice\\\\*.js\")",
+      "Bash(findstr:*)"
     ]
   }
 }
