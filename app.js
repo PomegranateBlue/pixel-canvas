@@ -5,11 +5,12 @@ import { createSphere } from './objects/sphere.js'
 import { initKeypad, moveSphere } from './animate/keypad.js'
 
 import generateFloor from './objects/floor.js'
+import { greenZone } from './backgroundGroups/background.js'
 import { addHelpers, addCameraDebugGUI } from './debug/helper.js'
 import { shouldRender } from './animate/clock.js'
 // import { updateJump } from './animate/jump.js'
 
-import { initPhysics, addDynamicBody, addCollideFloor, stepPhysics } from './animate/physics/rapierphysics.js'
+import { initPhysics, addDynamicBody, addCollideFloor, addGreenZoneCollider, stepPhysics } from './animate/physics/rapierphysics.js'
 
 // Scene, Camera 생성
 const scene = new THREE.Scene()
@@ -42,8 +43,10 @@ light.position.set(5, 5, 5)
 scene.add(light)
 
 // 체스판 생성
-
 generateFloor(scene)
+
+// greenZone 생성
+greenZone(scene)
 
 // 디버그 헬퍼
 addHelpers(scene)
@@ -66,6 +69,7 @@ const init = async () => {
 
     addDynamicBody(sphere, 0.4)
     addCollideFloor()
+    addGreenZoneCollider()
 
     const animate = (currentTime) => {
         requestAnimationFrame(animate)

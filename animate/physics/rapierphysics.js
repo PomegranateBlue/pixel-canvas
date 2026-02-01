@@ -40,3 +40,9 @@ export const addCollideFloor = () => {
     world.createCollider(RAPIER.ColliderDesc.cuboid(6, 0.1, 6), body)
     return body
 }
+
+export const addGreenZoneCollider = () => {
+    const body = world.createRigidBody(RAPIER.RigidBodyDesc.fixed().setTranslation(0, 0, 14))
+    world.createCollider(RAPIER.ColliderDesc.cuboid(8, 0.1, 8), body)
+    return body
+}
