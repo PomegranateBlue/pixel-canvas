@@ -10,14 +10,22 @@ import { addHelpers, addCameraDebugGUI } from './debug/helper.js'
 import { shouldRender } from './animate/clock.js'
 // import { updateJump } from './animate/jump.js'
 
-import { initPhysics, addDynamicBody, addCollideFloor, addGreenZoneCollider, stepPhysics } from './animate/physics/rapierphysics.js'
+import {
+    initPhysics,
+    addDynamicBody,
+    addCollideFloor,
+    addGreenZoneCollider,
+    stepPhysics,
+} from './animate/physics/rapierphysics.js'
+
+import { initViewControl, setViewTarget, updateViewControl } from './camera/viewControl.js'
 
 // Scene, Camera 생성
 const scene = new THREE.Scene()
 const BACKGROUND_COLOR = 0x1a1a2e
 scene.background = new THREE.Color(BACKGROUND_COLOR)
 
-const camera = new THREE.PerspectiveCamera(75, innerWidth / innerHeight, 0.1, 100)
+const camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 0.1, 100)
 camera.position.set(4.9, 5.5, 9.4)
 //현재 씬에서 고정시킬 카메라 좌표
 
@@ -28,7 +36,7 @@ document.body.appendChild(renderer.domElement)
 
 // OrbitControls
 const controls = new OrbitControls(camera, renderer.domElement)
-
+initViewControl(camera, controls)
 // 조명
 
 const AMBIENTLIGHT_COLOR = 0xffffff
@@ -55,6 +63,7 @@ addCameraDebugGUI(camera)
 // 구 생성 (체스판 위에 배치)
 const sphere = createSphere()
 scene.add(sphere)
+setViewTarget(sphere)
 
 // 키패드 이벤트 등록
 initKeypad()
@@ -77,7 +86,7 @@ const init = async () => {
         if (!shouldRender(currentTime)) {
             return
         }
-
+        updateViewControl()
         controls.update()
         moveSphere(sphere)
         stepPhysics()
