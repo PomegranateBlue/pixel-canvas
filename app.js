@@ -5,6 +5,7 @@ import { createSphere } from './objects/sphere.js'
 import { initKeypad, moveSphere } from './animate/keypad.js'
 
 import generateFloor from './objects/floor.js'
+import { createTerrain } from './objects/terrain.js'
 import { greenZone } from './backgroundGroups/background.js'
 import { addHelpers, addCameraDebugGUI } from './debug/helper.js'
 import { shouldRender } from './animate/clock.js'
@@ -13,6 +14,7 @@ import { shouldRender } from './animate/clock.js'
 import {
     initPhysics,
     addDynamicBody,
+    addStaticBody,
     addCollideFloor,
     addGreenZoneCollider,
     stepPhysics,
@@ -60,6 +62,9 @@ greenZone(scene)
 addHelpers(scene)
 addCameraDebugGUI(camera)
 
+// 지형 생성
+const terrain = createTerrain(scene)
+
 // 구 생성 (체스판 위에 배치)
 const sphere = createSphere()
 scene.add(sphere)
@@ -79,6 +84,7 @@ const init = async () => {
     addDynamicBody(sphere, 0.4)
     addCollideFloor()
     addGreenZoneCollider()
+    terrain.forEach(({ mesh, halfExtents }) => addStaticBody(mesh, halfExtents))
 
     const animate = (currentTime) => {
         requestAnimationFrame(animate)
